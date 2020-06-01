@@ -1,0 +1,58 @@
+syntax = "proto3";
+package proto;
+import "google/protobuf/timestamp.proto";
+option java_package = "com.nari.pms.blockchain.rpc";
+option java_outer_classname = "invokeAGCCommand";
+option go_package = ".;proto";
+
+message AGCCommand{
+  string plc_name = 1;
+  google.protobuf.Timestamp reg_time = 2;
+  string st_name = 3;
+  string reg_mode = 4;
+  float cur_value = 5;
+  float reg_value = 6;
+  float base_plc = 7;
+  enum Code{
+    NORMAL = 0;
+    WARN = 1;
+    ERROR = 2;
+  }
+  Code check_code = 8;
+}
+
+message InvokeAGCCommandRequest{
+  string user_id = 1;
+  repeated AGCCommand agc_cmds = 2;
+}
+
+message InvokeResponse{
+  repeated InvokeResult invokeResults = 1;
+}
+
+message InvokeResult{
+  bool ret = 1;
+  string key = 2;
+  string tx_id = 3;
+  google.protobuf.Timestamp invoke_time = 4;
+  string err_msg = 5;
+}
+
+message QueryAGCCommandRequest{
+  string user_id = 1;
+  google.protobuf.Timestamp start_time = 2;
+  google.protobuf.Timestamp end_time = 3;
+  string plc_name = 4;
+  string st_name = 5;
+}
+
+message QueryAGCCommandResponse{
+  repeated AGCCommand agc_cmds = 1;
+  string err_msg = 2;
+}
+
+service BlockChainService{
+  rpc invokeAGCCommand(InvokeAGCCommandRequest) returns (InvokeResponse);
+  rpc queryAGCCommand(QueryAGCCommandRequest) returns (QueryAGCCommandResponse);
+}
+

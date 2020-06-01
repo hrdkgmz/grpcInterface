@@ -1,0 +1,6 @@
+GrpcServer:
+ host: localhost:2333
+
+RpcxClient:
+ host: localhost:8972
+ servicePath: FabCli
